@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-
-const RESPONSE = { 
-	"base": "btc", 
-	"target": "usd", 
-	"change": 38.44495445, 
-	"lastUpdated": 1520823901, 
-	"price": 9576.23507113, 
-	"volume": 112763.99131044 
-};
+import axios from 'axios';
 
 function FormattedDate(props) {
 	return (
@@ -48,18 +40,34 @@ function ChangeDisplay(props) {
 class CryptoDisplay extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { lastUpdate: new Date() };
+		this.state = { 
+			lastUpdate: new Date(),
+			price: 'loading',
+			volume: 'loading',
+			change: 'loading', 
+		};
 	}
 
 	componentDidMount() {
-		this.timerID = setInterval(() => this.tick(), 5000);
+		this.updateCryptoInfo();
+		this.timerID = setInterval(() => this.updateCryptoInfo(), 30000);
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.timerID);
 	}
 
-	tick() {
+	updateCryptoInfo() {
+		const server = 'http://localhost:8080/';
+		const api = server + this.props.target + '/' + this.props.base;
+		axios.get(api)
+			.then(res => {
+				if (!res.data.error) {
+					this.setState({ price: res.data.price });
+					this.setState({ volume: res.data.volume });
+					this.setState({ change: res.data.change });
+				}
+			});
 		this.setState({ lastUpdate: new Date() });
 	}
 
@@ -67,9 +75,9 @@ class CryptoDisplay extends Component {
 		return (
 			<div>
 				<NameDisplay name={this.props.name} />
-				<PriceDisplay price={RESPONSE.price} />
-				<VolumeDisplay volume={RESPONSE.volume} />
-				<ChangeDisplay change={RESPONSE.change} />
+				<PriceDisplay price={this.state.price} />
+				<VolumeDisplay volume={this.state.volume} />
+				<ChangeDisplay change={this.state.change} />
 				<FormattedDate date={this.state.lastUpdate} />
 			</div>
 		);
