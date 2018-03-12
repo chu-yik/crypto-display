@@ -1,0 +1,56 @@
+.CryptoDisplay {
+	text-align: left;
+}
+
+.CryptoDisplay-mainTable {
+	border: 1px solid silver;
+	border-radius: 10px;
+	padding: 10px 10px;
+	width: 100%;
+	min-width: 250px;
+	max-width: 300px;
+	resize: horizontal;
+	overflow: auto;
+}
+
+.CryptoDisplay-name {
+	color: black;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.CryptoDisplay-price {
+	color: darkorange;	
+	font-size: 1em;
+	font-weight: bold;
+}
+
+.CryptoDisplay-nestedTable {
+	width: 100%;
+}
+
+.CryptoDisplay-nestedHeader {
+	font-weight: bold;
+	font-size: 0.75em;
+	color: grey;
+}
+
+.CryptoDisplay-volume {
+	font-size: 0.75em;
+	color: grey;
+}
+
+.CryptoDisplay-change-pos {
+	font-size: 0.75em;
+	color: limegreen;
+}
+
+.CryptoDisplay-change-neg {
+	font-size: 0.75em;
+	color: orangered;
+}
+
+.CryptoDisplay-lastUpdated {
+	font-size: 0.75em;
+	color: silver;
+}

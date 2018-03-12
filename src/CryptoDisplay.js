@@ -1,39 +1,53 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './CryptoDisplay.css';
 
-function FormattedDate(props) {
+function LastUpdatedRow(props) {
 	return (
-		<h5>Last updated: {props.date.toLocaleTimeString()}</h5>
+		<tr>
+			<td className='CryptoDisplay-lastUpdated'>Last updated: {props.date.toLocaleTimeString()}</td>
+		</tr>
 	);
 }
 
-function NameDisplay(props) {
+function NameDisplayRow(props) {
 	return (
-		<h2>{props.name}</h2>
+		<tr>
+			<td className='CryptoDisplay-name'>{props.name}</td>
+		</tr>
 	);
 }
 
-function PriceDisplay(props) {
+function PriceDisplayRow(props) {
 	return (
-		<h3>{props.price}</h3>
+		<tr>
+			<td className='CryptoDisplay-price'>${props.price}</td>
+		</tr>
 	);
 }
 
-function VolumeDisplay(props) {
-	return (
-		<div>
-			<h4>volume:</h4>
-			<h4>{props.volume}</h4>
-		</div>
+function ChangeDisplayTableData(props) {
+	const change = props.change;
+	return ( change >= 0 ?
+		<td className='CryptoDisplay-change-pos'>{props.change}</td> :
+		<td className='CryptoDisplay-change-neg'>{props.change}</td>
 	);
 }
 
-function ChangeDisplay(props) {
+function AdditionalInfoTable(props) {
 	return (
-		<div>
-			<h4>change:</h4>
-			<h4>{props.change}</h4>
-		</div>
+		<table className='CryptoDisplay-nestedTable'>
+			<tbody>
+				<tr>
+					<th className='CryptoDisplay-nestedHeader'>volume:</th>
+					<th className='CryptoDisplay-nestedHeader'>change:</th>
+				</tr>
+				<tr>
+					<td className='CryptoDisplay-volume'>{props.volume}</td>
+					<ChangeDisplayTableData change={props.change}/>
+				</tr>
+			</tbody>
+		</table>
 	);
 }
 
@@ -42,9 +56,9 @@ class CryptoDisplay extends Component {
 		super(props);
 		this.state = { 
 			lastUpdate: new Date(),
-			price: 'loading',
-			volume: 'loading',
-			change: 'loading', 
+			price: '-',
+			volume: '-',
+			change: '-', 
 		};
 	}
 
@@ -73,12 +87,22 @@ class CryptoDisplay extends Component {
 
 	render() {
 		return (
-			<div>
-				<NameDisplay name={this.props.name} />
-				<PriceDisplay price={this.state.price} />
-				<VolumeDisplay volume={this.state.volume} />
-				<ChangeDisplay change={this.state.change} />
-				<FormattedDate date={this.state.lastUpdate} />
+			<div className='CryptoDisplay'>
+				<table className='CryptoDisplay-mainTable'>
+					<tbody>
+						<NameDisplayRow name={this.props.name} />
+						<PriceDisplayRow price={this.state.price} />
+						<tr>
+							<td>
+								<AdditionalInfoTable 
+									volume={this.state.volume} 
+									change={this.state.change}
+								/>
+							</td>
+						</tr>
+						<LastUpdatedRow date={this.state.lastUpdate} />
+					</tbody>
+				</table>
 			</div>
 		);
 	}
