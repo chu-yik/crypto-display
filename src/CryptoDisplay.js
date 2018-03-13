@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './CryptoDisplay.css';
 
+const refreshIntervalMs = 10000;
+const server = 'http://localhost:8080/';
+
 // TODO: remove me
 function LastUpdatedRow(props) {
 	return (
 		<tr>
-			<td className='CryptoDisplay-lastUpdated'>Last updated: {props.date.toLocaleTimeString()}</td>
+			<td className='CryptoDisplay-lastUpdated'>Last updated: {props.date.toLocaleString('en-GB')}</td>
 		</tr>
 	);
 }
@@ -20,18 +23,29 @@ function NameDisplayRow(props) {
 }
 
 function PriceDisplayRow(props) {
+	const price = props.price;
+	const display = isNaN(price) ? '-' : '$' + price;
 	return (
 		<tr>
-			<td className='CryptoDisplay-price'>${props.price}</td>
+			<td className='CryptoDisplay-price'>{display}</td>
 		</tr>
+	);
+}
+
+function VolumeDisplayTableData(props) {
+	const volume = props.volume;
+	const display = (isNaN(volume) || !(volume)) ? '-' : volume;
+	return (
+		<td className='CryptoDisplay-volume'>{display}</td> 
 	);
 }
 
 function ChangeDisplayTableData(props) {
 	const change = props.change;
+	const display = (isNaN(change) || change === 0) ? '-' : change.toFixed(8);
 	return ( change >= 0 ?
-		<td className='CryptoDisplay-change-pos'>{props.change}</td> :
-		<td className='CryptoDisplay-change-neg'>{props.change}</td>
+		<td className='CryptoDisplay-change-pos'>{display}</td> :
+		<td className='CryptoDisplay-change-neg'>{display}</td>
 	);
 }
 
@@ -44,7 +58,7 @@ function AdditionalInfoTable(props) {
 					<th className='CryptoDisplay-nestedHeader'>change:</th>
 				</tr>
 				<tr>
-					<td className='CryptoDisplay-volume'>{props.volume}</td>
+					<VolumeDisplayTableData volume={props.volume}/>
 					<ChangeDisplayTableData change={props.change}/>
 				</tr>
 			</tbody>
@@ -56,16 +70,16 @@ class CryptoDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
-			lastUpdate: new Date(),
 			price: '-',
 			volume: '-',
-			change: '-', 
+			change: '-',
+			lastUpdated: '-' 
 		};
 	}
 
 	componentDidMount() {
 		this.updateCryptoInfo();
-		this.timerID = setInterval(() => this.updateCryptoInfo(), 30000);
+		this.timerID = setInterval(() => this.updateCryptoInfo(), refreshIntervalMs);
 	}
 
 	componentWillUnmount() {
@@ -73,7 +87,6 @@ class CryptoDisplay extends Component {
 	}
 
 	updateCryptoInfo() {
-		const server = 'http://localhost:8080/';
 		const api = server + this.props.target + '/' + this.props.base;
 		axios.get(api)
 			.then(res => {
@@ -81,6 +94,7 @@ class CryptoDisplay extends Component {
 					this.setState({ price: res.data.price });
 					this.setState({ volume: res.data.volume });
 					this.setState({ change: res.data.change });
+					this.setState({ lastUpdated: new Date() });
 				} else {
 					console.log('error: ' + res.data.error);
 				}
@@ -88,7 +102,6 @@ class CryptoDisplay extends Component {
 			.catch(err => {
 				console.log('error: ' + err);
 			});
-		this.setState({ lastUpdate: new Date() });
 	}
 
 	render() {
@@ -106,7 +119,7 @@ class CryptoDisplay extends Component {
 								/>
 							</td>
 						</tr>
-						<LastUpdatedRow date={this.state.lastUpdate} />
+						<LastUpdatedRow date={this.state.lastUpdated} />
 					</tbody>
 				</table>
 			</div>
