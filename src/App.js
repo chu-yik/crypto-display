@@ -14,6 +14,10 @@ class App extends Component {
 					<CryptoDisplay name='Monero' base='xmr' target='usd' />
 					<CryptoDisplay name='Ripple' base='xrp' target='usd' />
 					<CryptoDisplay name='Dogecoin' base='doge' target='usd' />
+					<CryptoDisplay name='Dash' base='dash' target='usd' />
+					<CryptoDisplay name='MaidSafeeCoin' base='maid' target='usd' />
+					<CryptoDisplay name='Lisk' base='lsk' target='usd' />
+					<CryptoDisplay name='Storjcoin X' base='storj' target='usd' />
 				</section>
 			</div>
 		);
