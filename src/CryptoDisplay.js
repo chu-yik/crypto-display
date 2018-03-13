@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './CryptoDisplay.css';
 
-const refreshIntervalMs = 10000;
-const server = 'http://localhost:8080/';
+const refreshIntervalMs = 15000;
+const server = 'https://mc-crypto-server.herokuapp.com/';
 
 // TODO: remove me
 function LastUpdatedRow(props) {
