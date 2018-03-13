@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './CryptoDisplay.css';
 
+// TODO: remove me
 function LastUpdatedRow(props) {
 	return (
 		<tr>
@@ -80,7 +81,12 @@ class CryptoDisplay extends Component {
 					this.setState({ price: res.data.price });
 					this.setState({ volume: res.data.volume });
 					this.setState({ change: res.data.change });
+				} else {
+					console.log('error: ' + res.data.error);
 				}
+			})
+			.catch(err => {
+				console.log('error: ' + err);
 			});
 		this.setState({ lastUpdate: new Date() });
 	}
