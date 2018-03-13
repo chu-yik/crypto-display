@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './CryptoDisplay.css';
 
+const refreshIntervalMs = 10000;
+const server = 'http://localhost:8080/';
+
 // TODO: remove me
 function LastUpdatedRow(props) {
 	return (
@@ -65,7 +68,7 @@ class CryptoDisplay extends Component {
 
 	componentDidMount() {
 		this.updateCryptoInfo();
-		this.timerID = setInterval(() => this.updateCryptoInfo(), 30000);
+		this.timerID = setInterval(() => this.updateCryptoInfo(), refreshIntervalMs);
 	}
 
 	componentWillUnmount() {
@@ -73,7 +76,6 @@ class CryptoDisplay extends Component {
 	}
 
 	updateCryptoInfo() {
-		const server = 'http://localhost:8080/';
 		const api = server + this.props.target + '/' + this.props.base;
 		axios.get(api)
 			.then(res => {
