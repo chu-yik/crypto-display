@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './CryptoDisplay.css';
+import { config } from './config.js';
 
-const refreshIntervalMs = 15000;
-const server = 'https://mc-crypto-server.herokuapp.com/';
-
-// TODO: remove me
 function LastUpdatedRow(props) {
 	return (
 		<tr>
@@ -79,7 +76,7 @@ class CryptoDisplay extends Component {
 
 	componentDidMount() {
 		this.updateCryptoInfo();
-		this.timerID = setInterval(() => this.updateCryptoInfo(), refreshIntervalMs);
+		this.timerID = setInterval(() => this.updateCryptoInfo(), config.refreshIntervalMs);
 	}
 
 	componentWillUnmount() {
@@ -87,7 +84,7 @@ class CryptoDisplay extends Component {
 	}
 
 	updateCryptoInfo() {
-		const api = server + this.props.target + '/' + this.props.base;
+		const api = config.server + this.props.target + '/' + this.props.base;
 		axios.get(api)
 			.then(res => {
 				if (!res.data.error) {
