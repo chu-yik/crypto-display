@@ -8,7 +8,7 @@ The project builds a web app which display cryptocurrencies information acquired
 
 A screenshot of the running app is as follow:
 
-![Screenshot](/Screenshots/screenshot.png?raw=true)
+![Screenshot](/Screenshot/screenshot.png?raw=true)
 
 ## Build environment
 
