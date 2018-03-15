@@ -45,7 +45,7 @@ npm install
 
 This should install all the dependencies.
 
-### Starting / stoping the app (development)
+### Starting / stopping the app (development)
 
 The following command will start the app (development build) at the default location *localhost:3000*:
 
@@ -106,5 +106,50 @@ The app hosted on heroku will [sleep a period of inactivity](https://devcenter.h
 
 ## Docker
 
-Section WIP
+To build the project with docker, first [install docker](https://docs.docker.com/install/).
 
+### Building the app (development)
+
+The *Dockerfile* is for development build. To build the app, run:
+
+```
+docker build -t crypto-display .
+```
+
+Note that *crypto-display* is just the tag given to our app.
+
+### Starting the app (development)
+
+After building the app, starting the app can be done by:
+
+```
+docker run -p 3000:3000 crypto-display
+```
+
+Or to run the app in detached mode (background), supply the '-d' option:
+
+```
+docker run -p 3000:3000 -d crypto-display
+```
+
+To enable hot-reload of the app at development:
+
+```
+docker run -it -v ${PWD}:/usr/src/app -p 3000:3000 -d crypto-display
+```
+
+Note that the '-d' option is optional, and the tag should match the one that is given at build, in the example it is *cryto-display*.
+
+### Stopping the app
+
+The app can be stopped by 'Ctrl-C' in the terminal that started it. Or in another terminal by the following command:
+
+```
+docker stop [container_id]
+```
+
+*[container_id]* can be checked by running:
+
+```
+docker ps
+```

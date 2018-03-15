@@ -1,3 +1,4 @@
+# Note - this dockerfile is for development build
 FROM node:latest
 
 # Create working directory
