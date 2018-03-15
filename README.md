@@ -45,7 +45,7 @@ npm install
 
 This should install all the dependencies.
 
-### Starting / stoping the app (development)
+### Starting / stopping the app (development)
 
 The following command will start the app (development build) at the default location *localhost:3000*:
 
@@ -106,5 +106,88 @@ The app hosted on heroku will [sleep a period of inactivity](https://devcenter.h
 
 ## Docker
 
-Section WIP
+To build the project with docker, first [install docker](https://docs.docker.com/install/).
 
+### Building the app 
+
+#### Development build
+
+The *Dockerfile* is for development build. To build the app, run:
+
+```
+docker build -t crypto-display .
+```
+
+Note that *crypto-display* is just the tag given to our app.
+
+#### Production build
+
+There is another Dockerfile *Dockerfile-prod* for production build, using multistage build.
+
+Note that port 80 is used for production build instead of 3000.
+
+To build the app for production:
+
+```
+docker build -f Dockerfile-prod -t crypto-display-prod .
+```
+
+Similarly *crypto-display-prod* is the tag given to the image.
+
+### Starting the app
+
+#### Development build
+
+After building the app, starting the app can be done by:
+
+```
+docker run -p 3000:3000 crypto-display
+```
+
+The app would be available at *localhost:3000*.
+
+Or to run the app in detached mode (background), supply the '-d' option:
+
+```
+docker run -p 3000:3000 -d crypto-display
+```
+
+To enable hot-reload of the app at development:
+
+```
+docker run -v ${PWD}:/usr/src/app -p 3000:3000 crypto-display
+```
+
+Note that */user/src/app* is the working directory specified in *Dockerfile*, and the image tag should match the one that is given at build, in the example it is *cryto-display*. Similarly a '-d' option can be supplied:
+
+```
+docker run -v ${PWD}:/usr/src/app -p 3000:3000 -d crypto-display
+```
+
+#### Production build
+
+Similar to development build, running the app in production can be done by:
+
+```
+docker run -p 80:80 crypto-display-prod
+```
+
+or in detached mode:
+
+```
+docker run -p 80:80 -d crypto-display-prod
+```
+
+### Stopping the app
+
+The app can be stopped by 'Ctrl-C' in the terminal that started it. Or in another terminal by the following command:
+
+```
+docker stop [container_id]
+```
+
+*[container_id]* can be checked by running:
+
+```
+docker ps
+```

@@ -1,0 +1,20 @@
+# Note - this dockerfile is for production build
+FROM node:latest as builder
+# Create working directory
+WORKDIR /usr/src/app
+# Copy both package.json and package-lock.json for dependencies
+COPY package*.json ./
+# Install npm packages for production
+RUN npm install
+# Bundle app source
+COPY . /usr/src/app
+# Run command for production build
+RUN npm run build
+
+# Production environment
+FROM nginx:mainline-alpine 
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+# Exposing port 80
+EXPOSE 80
+# Start command
+CMD [ "nginx", "-g", "daemon off;" ]
